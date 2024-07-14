@@ -1,0 +1,48 @@
+<div class="maincontainer row">
+    <div class="col">
+      <h2>{{ registerForm.formTitle }}</h2>
+      <form [formGroup]="dynamicFormGroup" (ngSubmit)="onSubmit()">
+        <ng-container *ngFor="let control of registerForm.formControls">
+          <div [ngClass]="control.class">
+            <label class="form-label">{{ control.label }}</label>
+            <ng-container [ngSwitch]="control.type">
+              <!-- Text, email, password, number, date, file inputs -->
+              <input title="text" *ngSwitchCase="'text'" [formControlName]="control.name" class="form-control" type="text">
+              <input title="text" *ngSwitchCase="'email'" [formControlName]="control.name" class="form-control" type="email">
+              <input title="text" *ngSwitchCase="'password'" [formControlName]="control.name" class="form-control" type="password">
+              <input title="text" *ngSwitchCase="'number'" [formControlName]="control.name" class="form-control" type="number">
+              <input title="text" *ngSwitchCase="'date'" [formControlName]="control.name" class="form-control" type="date">
+              <input title="text" *ngSwitchCase="'file'" [formControlName]="control.name" class="form-control" type="file">
+              
+              <!-- Select input -->
+              <select *ngSwitchCase="'select'" [formControlName]="control.name" class="form-select">
+                <option value="">Choose...</option>
+                <option *ngFor="let opt of control.options" [value]="opt.value">{{ opt.value }}</option>
+              </select>
+              
+              <!-- Radio buttons -->
+              <ng-container *ngSwitchCase="'radio'">
+                <div *ngFor="let option of control.radioOptions" class="form-check">
+                  <input title="text" [formControlName]="control.name" [value]="option" class="form-check-input" type="radio">
+                  <label class="form-check-label">{{ option }}</label>
+                </div>
+              </ng-container>
+              
+              <!-- Checkbox -->
+              <ng-container *ngSwitchCase="'checkbox'">
+                <div *ngFor="let option of control.checkboxOptions" class="form-check">
+                  <input title="text" [formControlName]="control.name" [value]="option" class="form-check-input" type="checkbox">
+                  <label class="form-check-label">{{ option }}</label>
+                </div>
+              </ng-container>
+            </ng-container>
+            <small *ngIf="dynamicFormGroup.get(control.name)?.invalid && (dynamicFormGroup.get(control.name)?.touched)" class="text-danger">{{getValidationErrors(control)}}</small></div>
+        </ng-container>
+        
+        <!-- Buttons -->
+        <button type="submit" class="btn btn-primary">{{ registerForm.saveBtnTitle }}</button>
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">{{ registerForm.resetBtnTitle }}</button>
+      </form>
+    </div>
+  </div>
+  
